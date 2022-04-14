@@ -105,7 +105,8 @@ server <- function(input, output) {
                 species_list_output <- merge(read.csv(input$file1$datapath,
                                                       header = input$header,
                                                       sep = input$sep,
-                                                      quote = input$quote), database,by.x = "species_name", by.y = "species_name")
+                                                      quote = input$quote), database, by.x = "species_name", by.y = "species_name",
+                                                      all.x = TRUE)
             },
             error = function(e) {
                 # return a safeError if a parsing error occurs
