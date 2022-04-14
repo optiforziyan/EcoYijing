@@ -16,7 +16,7 @@ species_list_output = NULL
 ui <- fluidPage(
 
     # Application title
-    titlePanel("EcoYijing - Species Information System"),
+    titlePanel("EcoYijing - A comprehensive Chinese Species Information Enquiry System (CSIES) V1.0"),
     
     # Sidebar layout with input and output definitions ----
     sidebarLayout(
@@ -25,7 +25,7 @@ ui <- fluidPage(
         sidebarPanel(
             
             # Input: Select a file ----
-            fileInput("file1", "Choose CSV File",
+            fileInput("file1", "Choose a CSV File. Note: one colume should be 'species_name' ",
                       multiple = FALSE,
                       accept = c("text/csv",
                                  "text/comma-separated-values,text/plain",
@@ -34,26 +34,7 @@ ui <- fluidPage(
             # Horizontal line ----
             tags$hr(),
             
-            # Input: Checkbox if file has header ----
-            checkboxInput("header", "Header", TRUE),
-            
-            # Input: Select separator ----
-            radioButtons("sep", "Separator",
-                         choices = c(Comma = ",",
-                                     Semicolon = ";",
-                                     Tab = "\t"),
-                         selected = ","),
-            
-            # Input: Select quotes ----
-            radioButtons("quote", "Quote",
-                         choices = c(None = "",
-                                     "Double Quote" = '"',
-                                     "Single Quote" = "'"),
-                         selected = '"'),
-            
-            # Horizontal line ----
-            tags$hr(),
-            
+
             # Input: Select number of rows to display ----
             radioButtons("disp", "Display",
                          choices = c(Head = "head",
@@ -69,8 +50,6 @@ ui <- fluidPage(
         # Main panel for displaying outputs ----
         mainPanel(
            
-             # Horizontal line ----
-            tags$hr(),
             
             tableOutput("table")
             
@@ -102,11 +81,10 @@ server <- function(input, output) {
         # having a comma separator causes `read.csv` to error
         tryCatch(
             {
-                species_list_output <- merge(read.csv(input$file1$datapath,
-                                                      header = input$header,
-                                                      sep = input$sep,
-                                                      quote = input$quote), database, by.x = "species_name", by.y = "species_name",
+                species_list_output <- merge(read.csv(input$file1$datapath), database, 
+                                                      by.x = "species_name", by.y = "species_name",
                                                       all.x = TRUE)
+                species_list_output[order(species_list_output$No),]
             },
             error = function(e) {
                 # return a safeError if a parsing error occurs
