@@ -25,7 +25,7 @@ ui <- fluidPage(
         sidebarPanel(
             
             # Input: Select a file ----
-            fileInput("file1", "Choose a CSV File. Note: one colume should be 'species_name' ",
+            fileInput("file1", "Choose a CSV File. Note: one colume should be 'Species_name' ",
                       multiple = FALSE,
                       accept = c("text/csv",
                                  "text/comma-separated-values,text/plain",
@@ -82,7 +82,7 @@ server <- function(input, output) {
         tryCatch(
             {
                 species_list_output <- merge(read.csv(input$file1$datapath), database, 
-                                                      by.x = "species_name", by.y = "species_name",
+                                                      by.x = "Species_name", by.y = "Species_name",
                                                       all.x = TRUE)
                 species_list_output[order(species_list_output$No),]
             },
